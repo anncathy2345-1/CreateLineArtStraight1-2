@@ -28,7 +28,6 @@
 
 <h2>Generative Line Art</h2>
 <canvas id="art" width="800" height="800"></canvas>
-<button onclick="generate()">Generate New</button>
 <button onclick="download()">Download PNG</button>
 
 <script>
@@ -37,7 +36,7 @@
 
   // Seeded random generator (important for editions)
   function seededRandom(seed) {
-    let x = Math.sin(seed++) * 10000;
+    let x = Math.sin(seed++) * width;
     return x - Math.floor(x);
   }
 
@@ -50,8 +49,8 @@
     let s = seed;
 
     for (let i = 0; i < lines; i++) {
-      let x1 = seededRandom(s++) * canvas.width;
-      let y1 = seededRandom(s++) * canvas.height;
+      let x1 = seededRandom(s++) * canvas.width/2;
+      let y1 = seededRandom(s++) * canvas.height/2;
 
       let angle = seededRandom(s++) * Math.PI * 2;
       let length = 30 + seededRandom(s++) * 120;
@@ -78,6 +77,16 @@
 
   generate();
 </script>
+  
+  //signature 
+  const padding=10;
+  ctx.font=:14px Italian";
+  ctx.fillStyle="rgba(0,0,0,0.6)";
+  ctx textAlign="right";
+  ctx textBaseline="bottom";
+
+  ctx.fillText('SAG©'. ID:{$artID}',canvas.width-padding,canvas.heigh-padding);
+  </script>
 
 </body>
 </html>
