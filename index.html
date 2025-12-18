@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Generative Line Art</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #f5f5f5;
+      font-family: sans-serif;
+    }
+    canvas {
+      border: 1px solid #000;
+      margin-top: 20px;
+      background: white;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Generative Line Art</h2>
+<canvas id="art" width="800" height="800"></canvas>
+<button onclick="generate()">Generate New</button>
+<button onclick="download()">Download PNG</button>
+
+<script>
+  const canvas = document.getElementById("art");
+  const ctx = canvas.getContext("2d");
+
+  // Seeded random generator (important for editions)
+  function seededRandom(seed) {
+    let x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  }
+
+  function generate(seed = Date.now()) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#000";
+
+    let lines = 300;
+    let s = seed;
+
+    for (let i = 0; i < lines; i++) {
+      let x1 = seededRandom(s++) * canvas.width;
+      let y1 = seededRandom(s++) * canvas.height;
+
+      let angle = seededRandom(s++) * Math.PI * 2;
+      let length = 30 + seededRandom(s++) * 120;
+
+      let x2 = x1 + Math.cos(angle) * length;
+      let y2 = y1 + Math.sin(angle) * length;
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+
+    // Artwork metadata (you’ll use this later)
+    window.artSeed = seed;
+  }
+
+  function download() {
+    const link = document.createElement("a");
+    link.download = `line-art-${window.artSeed}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }
+
+</body>
+</html>
